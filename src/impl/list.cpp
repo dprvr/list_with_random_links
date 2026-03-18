@@ -14,34 +14,33 @@
 List::List(){
     headNode_ = nullptr;
     tailNode_ = nullptr;
-    nodesCount_ = 0;
     nodes_ = std::unordered_set<ListNode*>();
 }
 
 int List::GetNodesCount() const{
-    return nodesCount_;
+    return nodes_.size();
 }
 
 bool List::IsEmpty() const{
-    return nodesCount_ == 0;
+    return nodes_.empty();
 }
 
 ListNode* List::GetHeadNode() const{
-    if (nodesCount_ == 0){
+    if (IsEmpty()){
         throw std::logic_error("Trying to get the head node of an empty list.");
     }
     return headNode_;
 }
 
 ListNode* List::GetTailNode() const{
-    if (nodesCount_ == 0){
+    if (IsEmpty()){
         throw std::logic_error("Trying to get the tail node of an empty list.");
     }
     return tailNode_;
 }
 
 ListNode* List::GetNodeAt(int index) const{
-    if (index < 0 || index >= nodesCount_){
+    if (index < 0 || index >= GetNodesCount()){
         throw std::invalid_argument("The node index was bigger or equal to the nodes count.");
     }
     ListNode* node = headNode_;
@@ -150,12 +149,10 @@ void List::SetDataForNode(ListNode* node, ListNodeData* data) const{
 
 void List::AfterNodeInsert(ListNode* newNode){
     nodes_.insert(newNode);
-    nodesCount_++;
 }
 
 void List::BeforeNodeDelete(ListNode* nodeToRemove){
     nodes_.erase(nodeToRemove);
-    nodesCount_--;
     nodeToRemove->Clear();
 }
 
@@ -164,7 +161,7 @@ ListNode* List::AddNodeToTheLeft(ListNodeData* data){
         throw std::invalid_argument("The data was null.");
     }
     ListNode* newNode = new ListNode(data);
-    if (nodesCount_ == 0) {
+    if (IsEmpty()) {
         headNode_ = newNode;
         tailNode_ = newNode;
     }
@@ -179,7 +176,7 @@ ListNode* List::AddNodeToTheLeft(ListNodeData* data){
 
 ListNode* List::AddNodeToTheRight(ListNodeData* data){
     ListNode* newNode = new ListNode(data);
-    if (nodesCount_ == 0) {
+    if (IsEmpty()) {
         headNode_ = newNode;
         tailNode_ = newNode;
     }
@@ -223,11 +220,11 @@ ListNode* List::AddNodeBefore(ListNode* node, ListNodeData* data){
 }
 
 void List::RemoveHeadNode(){
-    if (nodesCount_ == 0){
+    if (IsEmpty()){
         throw std::logic_error("The list is empty, nothing to delete.");
     }
     ListNode* nodeToRemove = headNode_;
-    if (nodesCount_ == 1){
+    if (GetNodesCount() == 1){
         headNode_ = nullptr;
         tailNode_ = nullptr;    
     }
@@ -242,11 +239,11 @@ void List::RemoveHeadNode(){
 }
 
 void List::RemoveTailNode(){
-    if (nodesCount_ == 0){
+    if (IsEmpty()){
         throw std::logic_error("The list is empty, nothing to delete.");
     }
     ListNode* nodeToRemove = tailNode_;
-    if (nodesCount_ == 1){
+    if (GetNodesCount() == 1){
         headNode_ = nullptr;
         tailNode_ = nullptr;
     }
@@ -262,7 +259,7 @@ void List::RemoveNode(ListNode* node){
     if (!ContainsNode(node)){
         throw std::invalid_argument("The given node doesn't belong to the list.");
     }
-    if (nodesCount_ == 0){
+    if (IsEmpty()){
         throw std::logic_error("The list is empty, nothing to delete.");
     }
     if (node == headNode_){
