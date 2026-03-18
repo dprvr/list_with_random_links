@@ -80,6 +80,23 @@ TEST(ListTests, ListMethodsFallCorrectlyWhenInputNodeNotBelongToList){
     EXPECT_ANY_THROW(list->TryGetRandomNode(otherListNode, node));
 }
 
+TEST(ListTests, ListAddNodeMethodsFallCorrectWhenMaxCapacityReached){
+    List* list = new List();
+    for (size_t i = 0; i < list->GetCapacityLimit(); i++){
+        list->AddNodeToTheRight(new ListNodeData(std::string(std::to_string(i))));
+    }
+    
+    EXPECT_EQ(list->GetNodesCount(), list->GetCapacityLimit());
+
+    ListNode* someNode = list->GetTailNode();
+    ListNodeData* someData = new ListNodeData(std::string("data"));
+
+    EXPECT_ANY_THROW(list->AddNodeAfter(someNode, someData));
+    EXPECT_ANY_THROW(list->AddNodeBefore(someNode, someData));
+    EXPECT_ANY_THROW(list->AddNodeToTheRight(someData));
+    EXPECT_ANY_THROW(list->AddNodeToTheLeft(someData));
+}
+
 TEST(ListTests, ListContainsLogicCorrect){
     List* list = new List();
     List* secondList = new List();    

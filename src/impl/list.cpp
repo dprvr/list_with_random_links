@@ -17,7 +17,11 @@ List::List(){
     nodes_ = std::unordered_set<ListNode*>();
 }
 
-int List::GetNodesCount() const{
+size_t List::GetCapacityLimit() const {
+    return List::capacityLimit_;
+}
+
+size_t List::GetNodesCount() const{
     return nodes_.size();
 }
 
@@ -160,6 +164,9 @@ ListNode* List::AddNodeToTheLeft(ListNodeData* data){
     if (data == nullptr){
         throw std::invalid_argument("The data was null.");
     }
+    if (GetNodesCount() >= GetCapacityLimit()){
+        throw std::invalid_argument("Can't add the new node, because the list capacity limit already reached.");
+    }
     ListNode* newNode = new ListNode(data);
     if (IsEmpty()) {
         headNode_ = newNode;
@@ -175,6 +182,9 @@ ListNode* List::AddNodeToTheLeft(ListNodeData* data){
 }
 
 ListNode* List::AddNodeToTheRight(ListNodeData* data){
+    if (GetNodesCount() >= GetCapacityLimit()){
+        throw std::invalid_argument("Can't add the new node, because the list capacity limit already reached.");
+    }
     ListNode* newNode = new ListNode(data);
     if (IsEmpty()) {
         headNode_ = newNode;
@@ -193,6 +203,9 @@ ListNode* List::AddNodeAfter(ListNode* node, ListNodeData* data){
     if (!ContainsNode(node)){
         throw std::invalid_argument("The given node doesn't belongs to the list.");
     }
+    if (GetNodesCount() >= GetCapacityLimit()){
+        throw std::invalid_argument("Can't add the new node, because the list capacity limit already reached.");
+    }
     if (node == tailNode_){
         return AddNodeToTheRight(data);
     }
@@ -207,6 +220,9 @@ ListNode* List::AddNodeAfter(ListNode* node, ListNodeData* data){
 ListNode* List::AddNodeBefore(ListNode* node, ListNodeData* data){
     if (!ContainsNode(node)){
         throw std::invalid_argument("The given node doesn't belongs to the list.");
+    }
+    if (GetNodesCount() >= GetCapacityLimit()){
+        throw std::invalid_argument("Can't add the new node, because the list capacity limit already reached.");
     }
     if (node == headNode_){
         return AddNodeToTheLeft(data);

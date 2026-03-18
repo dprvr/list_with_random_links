@@ -10,7 +10,8 @@ class List{
     public:
         List();
 
-        int GetNodesCount() const;
+        size_t GetCapacityLimit() const;
+        size_t GetNodesCount() const;
         bool IsEmpty() const;
 
         ListNode* GetHeadNode() const;
@@ -45,8 +46,9 @@ class List{
         void AfterNodeInsert(ListNode* node);
         void BeforeNodeDelete(ListNode* node);
 
+        static const size_t capacityLimit_ = 1000000;
+
         ListNode* headNode_;
         ListNode* tailNode_;
-        int nodesCount_;
         std::unordered_set<ListNode*> nodes_;
 };
